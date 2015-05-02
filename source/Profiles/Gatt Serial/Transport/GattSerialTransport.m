@@ -42,8 +42,9 @@
     //If there is no data to send in this message, do nothing
     if(!message) return;
     [gattPacketTxQueue addObjectsFromArray:[self __packetsFromMessage:message]];
-    [bufferUnloadTimer invalidate];
-    bufferUnloadTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(__unloadOutgoingQueue) userInfo:nil repeats:YES];
+    if (!bufferUnloadTimer.valid) {
+        bufferUnloadTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(__unloadOutgoingQueue) userInfo:nil repeats:YES];
+    }
 }
 
 #pragma mark Private Methods
